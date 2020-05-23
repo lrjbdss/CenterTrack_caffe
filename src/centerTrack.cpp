@@ -52,7 +52,7 @@ cv::Mat CenterTrack::img_preprocess(cv::Mat img)
         cv::Point2f ori[3], inp[3];
         ori[0] = cv::Point2f(ori_w / 2., ori_h / 2.);
         inp[0] = cv::Point2f(inp_w / 2., inp_h / 2.);
-        if (ori_w / float(ori_h) > inp_w / float(inp_h))
+        if (ori_w / float(ori_h) >= inp_w / float(inp_h))
         {
             float delta_h = (inp_h / float(inp_w) * ori_w - ori_h) / 2.;
             ori[1] = cv::Point2f(0., ori_h / 2.);
@@ -95,10 +95,7 @@ std::vector<Track> CenterTrack::tracking(cv::Mat &img, cv::Mat input_pre_img)
     if (!pre_img.data)
         pre_img = resized_img;
     std::vector<cv::Mat> pre_img_channels;
-    // printf("********");
-    // printf("********%d", net_->input_blobs().size());
-    // for (auto blob : net_->input_blobs())
-    //     printf("********%d", blob->channels());
+
     WrapInputLayer(&pre_img_channels, net_->input_blobs()[1]);
     Preprocess(pre_img, pre_img_channels);
     for (int i = 0; i < pre_img_channels.size(); ++i)
@@ -132,7 +129,7 @@ std::vector<Track> CenterTrack::post_process()
     // int hm_w = int(inp_w / 4);
     // int hm_h = int(inp_h / 4);
     int hm_w = 88; // 本来应该320下采样4倍变成80,因为caffe的pooling只有ceil_mode,
-    int hm_h = 88; // 结果变成了88,与训练是有差异
+    int hm_h = 88; // 结果变成了88,与训练时有差异
     CHECK_EQ(hm->channels(), num_class) << "output hm channel should equal to num_class.";
     CHECK_EQ(hm->width(), hm_w) << "output hm width should have equal to input_width/4.";
     CHECK_EQ(hm->height(), hm_h) << "output hm height should have equal to input_height/4.";
@@ -265,17 +262,8 @@ void CenterTrack::Preprocess(const cv::Mat &img,
     else
         sample_resized.convertTo(sample_float, CV_32FC1);
 
-    // cv::Mat sample_normalized;
-    // sample_normalized = (sample_float - 127.5) * scale;
-    // cv::subtract(sample_float, mean_, sample_normalized);
-
     /* This operation will write the separate BGR planes directly to the
    * input layer of the network because it is wrapped by the cv::Mat
    * objects in input_channels. */
     cv::split(sample_float, input_channels);
-    // cv::imshow("sample_float", sample_float);
-    // cv::waitKey(0);
-
-    // CHECK(reinterpret_cast<float *>(input_channels.at(0).data) == net_->input_blobs()[0]->cpu_data())
-    //     << "Input channels are not wrapping the input layer of the network.";
 }

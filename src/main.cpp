@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, const char *argv[])
 {
 
-    auto input_path = string("/home/lx/work/centerTrack_SDK/videos/301.avi");
+    auto input_path = string("/home/lx/work/centerTrack_SDK/videos/10.avi");
 
     cv::VideoCapture cap(input_path);
     if (!cap.isOpened())
@@ -34,8 +34,6 @@ int main(int argc, const char *argv[])
         for (auto track : results)
         {
             draw_bbox(image, track.bbox, to_string(track.track_id), color_map(track.track_id));
-
-            // cv::rectangle(image, it->second.bbox, (255, 128, 128), 2);
         }
 
         cv::imshow("image", image);
