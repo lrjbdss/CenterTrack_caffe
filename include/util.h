@@ -3,6 +3,26 @@
 #include <vector>
 #include <numeric>
 
+struct Track
+{
+    float score;
+    float class_id;
+    cv::Point2f center;
+    // std::array<float, 2> tracking;
+    cv::Vec2f tracking;
+    cv::Rect2f bbox;
+    int track_id;
+    int active;
+    // void update(Track det)
+    // {
+    //     score = det.score;
+    //     center = det.center;
+    //     tracking = det.tracking;
+    //     bbox = det.bbox;
+    //     active += 1;
+    // }
+};
+
 cv::Scalar color_map(int64_t n);
 // {
 //     auto bit_get = [](int64_t x, int64_t i) { return x & (1 << i); };
@@ -32,9 +52,7 @@ void draw_text(cv::Mat &img, const std::string &str,
 //     cv::putText(img, str, bottom_left, cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255) - color);
 // }
 
-void draw_bbox(cv::Mat &img, cv::Rect2f bbox,
-               const std::string &label = "",
-               const cv::Scalar &color = {0, 0, 0});
+void draw_result(cv::Mat &img, Track track);
 // {
 //     auto img_box = cv::Rect2f(bbox.x * img.cols,
 //                               bbox.y * img.rows,

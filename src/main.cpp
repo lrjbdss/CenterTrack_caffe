@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, const char *argv[])
 {
 
-    auto input_path = string("/home/lx/work/centerTrack_SDK/videos/10.avi");
+    auto input_path = string("/home/lx/work/hi3519/nfs100.69/centerTrack/data/500.avi");
 
     cv::VideoCapture cap(input_path);
     if (!cap.isOpened())
@@ -15,8 +15,8 @@ int main(int argc, const char *argv[])
         throw runtime_error("Cannot open cv::VideoCapture");
     }
 
-    std::string prototxtPath = "/home/lx/work/centerTrack_SDK/model/res18_centerTrack.prototxt";
-    std::string caffeModelPath = "/home/lx/work/centerTrack_SDK/model/res18_centerTrack.caffemodel";
+    std::string prototxtPath = "/home/lx/work/centerTrack_SDK/model/mosaic1_1533.prototxt";
+    std::string caffeModelPath = "/home/lx/work/centerTrack_SDK/model/mosaic1_1533.caffemodel";
     CenterTrack centerTrack(prototxtPath, caffeModelPath);
     // Tracker tracker = Tracker();
 
@@ -25,6 +25,7 @@ int main(int argc, const char *argv[])
     cv::VideoWriter outputCap("../output_video/res18_centerTrack.avi",
                               CV_FOURCC('M', 'P', '4', '2'), 25.0, orig_dim);
     auto image = cv::Mat();
+    int frame_count = 0;
     while (cap.read(image))
     // while (true)
     {
@@ -33,13 +34,13 @@ int main(int argc, const char *argv[])
 
         for (auto track : results)
         {
-            draw_bbox(image, track.bbox, to_string(track.track_id), color_map(track.track_id));
+            draw_result(image, track);
         }
-
-        cv::imshow("image", image);
-        cv::waitKey(1);
-
+        cv::putText(image, std::to_string(frame_count++), cv::Point(0, 20), CV_FONT_HERSHEY_PLAIN, 2, cv::Scalar(0, 0, 0));
         outputCap << image;
+        // cv::imshow("image", image);
+        // if (cv::waitKey(0) == 27)
+        //     break;
     }
     outputCap.release();
 

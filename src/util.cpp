@@ -65,19 +65,13 @@ void draw_text(cv::Mat &img, const std::string &str,
     cv::putText(img, str, bottom_left, cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255) - color);
 }
 
-void draw_bbox(cv::Mat &img, cv::Rect2f bbox,
-               const std::string &label,
-               const cv::Scalar &color)
+void draw_result(cv::Mat &img, Track track)
 {
-    // auto img_box = cv::Rect2f(bbox.x * img.cols,
-    //                           bbox.y * img.rows,
-    //                           bbox.width * img.cols,
-    //                           bbox.height * img.rows);
-
-    cv::rectangle(img, bbox, color);
-
-    if (!label.empty())
-    {
-        draw_text(img, label, color, bbox.tl());
-    }
+    auto color = color_map(track.track_id);
+    cv::rectangle(img, track.bbox, color);
+    cv::Point2f pred_pre(track.center);
+    pred_pre.x += track.tracking[0];
+    pred_pre.y += track.tracking[1];
+    cv::arrowedLine(img, track.center, pred_pre, cv::Scalar(255, 0, 255), 3, 8, 0, 0.2);
+    draw_text(img, std::to_string(track.track_id), color, track.bbox.tl());
 }

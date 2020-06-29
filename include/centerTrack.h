@@ -11,11 +11,13 @@ public:
     CenterTrack(const std::string prototxtPath,
                 const std::string caffeModelPath,
                 float score_threshold = 0.3,
-                bool input_pre_hm = true,
+                bool input_pre_hm = false,
                 int num_class = 1,
                 int topK = 25,
+                // std::array<float, 3> mean = {105.9422484375, 105.21612951388889, 105.52638559027778},
+                // float std = 78.21761860831944);
                 std::array<float, 3> mean = {0.40789655, 0.44719303, 0.47026116},
-                std::array<float, 3> std = {0.2886383, 0.27408165, 0.27809834});
+                std::array<float, 3> std = {0.279, 0.279, 0.279});
 
     std::vector<Track> tracking(cv::Mat &img, cv::Mat pre_img);
 

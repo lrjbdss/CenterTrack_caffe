@@ -6,26 +6,6 @@
 #include <math.h>
 #include "util.h"
 
-struct Track
-{
-    float score;
-    float class_id;
-    cv::Point2f center;
-    // std::array<float, 2> tracking;
-    cv::Vec2f tracking;
-    cv::Rect2f bbox;
-    int track_id;
-    int active;
-    // void update(Track det)
-    // {
-    //     score = det.score;
-    //     center = det.center;
-    //     tracking = det.tracking;
-    //     bbox = det.bbox;
-    //     active += 1;
-    // }
-};
-
 class Tracker
 {
 public:
