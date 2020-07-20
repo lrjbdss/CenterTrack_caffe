@@ -148,7 +148,7 @@ std::vector<Track> CenterTrack::post_process()
     {
         // if (hm_data[i] != hm_pool_data[i])
         //     hm_data[i] = 0.;
-        row = i / hm_w;
+        row = i / hm_w % hm_h;
         col = i % hm_w;
         if (col > 0)
         {
